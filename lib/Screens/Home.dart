@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:open_fashion/Models/cover_model.dart';
 import 'package:open_fashion/Models/product_model.dart';
+import 'package:open_fashion/Screens/checkout.dart';
 import 'package:open_fashion/components/custom_text.dart';
 import 'package:open_fashion/core/colors.dart';
 
@@ -62,18 +63,26 @@ class Home extends StatelessWidget {
                           ),
                         itemBuilder: (context, index){
                           final item = ProductModel.products[index];
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(item.image),
-                                Gap(10),
-                                CustomText(text: item.name),
-                                CustomText(text: item.description,color: Colors.grey,),
-                                Gap(9),
-                                CustomText(text: "\$ ${item.price.toString()}",
-                                color: Colors.red.shade200,
-                                size: 20,),
-                              ],
+                            return GestureDetector(
+                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => Checkout(
+                                image: item.image,
+                                name: item.name,
+                                price: item.price,
+                                description: item.description,
+                              ))),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.asset(item.image),
+                                  Gap(10),
+                                  CustomText(text: item.name),
+                                  CustomText(text: item.description,color: Colors.grey,),
+                                  Gap(9),
+                                  CustomText(text: "\$ ${item.price.toString()}",
+                                  color: Colors.red.shade200,
+                                  size: 20,),
+                                ],
+                              ),
                             );
                         },
                       ),
@@ -105,38 +114,7 @@ class Home extends StatelessWidget {
                         ),
                       ),
                       Gap(40),
-                      Container(
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Ionicons.logo_twitter,color: Colors.white,),
-                                Gap(15),
-                                Icon(Ionicons.logo_instagram,color: Colors.white,),
-                                Gap(15),
-                                Icon(Ionicons.logo_facebook,color: Colors.white,),
-                              ],
-                            ),
-                            Gap(20),
-                            Image.asset("assets/svgs/line.png",width: 190,),
-                            Gap(20),
-                            CustomText(
-                              max: 3,
-                              height: 2.5,
-                              text: "support@openui.design \n        +60 825 876 \n 09:00 - 24:00 - Everyday",
-                            ),
-                            Gap(20),
-                            Image.asset("assets/svgs/line.png",width: 190,),
-                            Gap(20),
-                            CustomText(
-                              max: 3,
-                              height: 2.5,
-                              text: "About    Contact    Blog",
-                            ),
-                          ],
-                        ),
-                      ),
+                      about(),
                       Gap(20)
                     ],
                   ),
@@ -144,10 +122,12 @@ class Home extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   color: Color(0xffC4C4C4),
-                  child: CustomText(
-                    max: 3,
-                    height: 2.5,
-                    text: "Copyrighte Eng/ Ahmed Al-Zabr ",
+                  child: Center(
+                    child: CustomText(
+                      max: 3,
+                      height: 2.5,
+                      text: "Copyrighte Eng/ Ahmed Al-Zabr ",
+                    ),
                   ),
                 )
               ],
@@ -157,4 +137,36 @@ class Home extends StatelessWidget {
       ),
     );
   }
+}
+Widget about() {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Ionicons.logo_twitter,color: Colors.white,),
+          Gap(15),
+          Icon(Ionicons.logo_instagram,color: Colors.white,),
+          Gap(15),
+          Icon(Ionicons.logo_facebook,color: Colors.white,),
+        ],
+      ),
+      Gap(20),
+      Image.asset("assets/svgs/line.png",width: 190,),
+      Gap(20),
+      CustomText(
+        max: 3,
+        height: 2.5,
+        text: "support@openui.design \n        +60 825 876 \n 09:00 - 24:00 - Everyday",
+      ),
+      Gap(20),
+      Image.asset("assets/svgs/line.png",width: 190,),
+      Gap(20),
+      CustomText(
+        max: 3,
+        height: 2.5,
+        text: "About    Contact    Blog",
+      ),
+    ],
+  );
 }
