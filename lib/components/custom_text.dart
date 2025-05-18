@@ -29,6 +29,7 @@ final double spacing;
         color: color,
         height: height,
         fontWeight: weight,
+        overflow: TextOverflow.ellipsis,
         fontFamily: "TenorSans",
       ),
     );
