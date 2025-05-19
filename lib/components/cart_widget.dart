@@ -6,8 +6,10 @@ import '../core/colors.dart';
 import 'custom_text.dart';
 
 class CartWidget extends StatefulWidget {
-  const CartWidget({super.key, required this.image, required this.name, required this.price, required this.description});
-final String image,name,price,description;
+  const CartWidget({super.key, required this.image, required this.name, required this.price, required this.description, required this.onChanged});
+final String image,name,description;
+final int price;
+final Function(int) onChanged;
   @override
   State<CartWidget> createState() => _CartWidgetState();
 }
@@ -40,6 +42,7 @@ class _CartWidgetState extends State<CartWidget> {
                   setState(() {
                     if(number > 1){
                       number--;
+                      widget.onChanged(number);
                     }
                   });
                 }, "assets/svgs/min.svg"),
@@ -49,6 +52,7 @@ class _CartWidgetState extends State<CartWidget> {
                 gty((){
                   setState(() {
                     number++;
+                    widget.onChanged(number);
                   });
 
                 }, "assets/svgs/plus.svg"),
@@ -57,7 +61,7 @@ class _CartWidgetState extends State<CartWidget> {
               ],
             ),
             Gap(20),
-            CustomText(text: "\$ ${widget.price}",color: Colors.red.shade200,size: 25,),
+            CustomText(text: "\$ ${widget.price}",color: Colors.red.shade200,size: 22,),
           ],
         )
       ],

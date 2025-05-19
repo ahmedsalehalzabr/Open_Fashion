@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:open_fashion/Screens/place_order.dart';
 import 'package:open_fashion/components/cart_widget.dart';
 import 'package:open_fashion/components/custom_appbar.dart';
+import 'package:open_fashion/components/custom_button.dart';
 import 'package:open_fashion/components/custom_text.dart';
 import 'package:open_fashion/core/colors.dart';
 
@@ -18,7 +20,7 @@ class Checkout extends StatefulWidget {
 
   final String image;
   final String name;
-  final String price;
+  final int price;
   final String description;
 
   @override
@@ -26,6 +28,7 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
+  int selectedQty = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +38,37 @@ class _CheckoutState extends State<Checkout> {
         child: Column(
           children: [
             Header(title: 'Checkout',),
-            CartWidget(image: widget.image, name: widget.name, price: widget.price, description: widget.description)
+            CartWidget(
+                image: widget.image,
+                name: widget.name,
+                price: widget.price,
+                description: widget.description,
+                onChanged: (v) {
+                  setState(() {
+                    selectedQty = v;
+                  });
+                },
+            ),
+            promo(),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomText(text: "Est. Total",color: AppColors.primary,),
+                CustomText(text: "\$ ${widget.price * selectedQty}",color: AppColors.primary,),
+              ],
+            ),
+            Gap(20),
+            CustomButton(
+              isSvgg: true,
+              title: "Checkout",
+              inTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (c){
+                  return PlaceOrder(image: widget.image, name: widget.name, description: widget.description, qty: selectedQty, total: widget.price * selectedQty, price: widget.price,);
+                }));
+              },
+            ),
+
           ],
         ),
       ),
@@ -43,3 +76,34 @@ class _CheckoutState extends State<Checkout> {
     );
   }
 }
+ Widget promo() {
+  return Column(
+    children: [
+      Divider(),
+      Gap(20),
+      Row(
+        children: [
+          SvgPicture.asset("assets/svgs/promo.svg",width: 28,),
+          Gap(20),
+          CustomText(text: "Add promo code", color: AppColors.primary,)
+        ],
+      ),
+      Gap(10),
+      Divider(),
+      Gap(20),
+      Row(
+        children: [
+          SvgPicture.asset("assets/svgs/delivery.svg",width: 25,),
+          Gap(20),
+          CustomText(text: "Delivery",color: AppColors.primary,),
+          Spacer(),
+          CustomText(text: "Free",color: AppColors.primary,),
+          Gap(5),
+        ],
+      ),
+      Gap(10),
+      Divider(),
+      Gap(10),
+    ],
+  );
+ }

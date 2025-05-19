@@ -67,7 +67,7 @@ class Home extends StatelessWidget {
                               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => Checkout(
                                 image: item.image,
                                 name: item.name,
-                                price: item.price.toString(),
+                                price: item.price,
                                 description: item.description,
                               ))),
                               child: Column(
