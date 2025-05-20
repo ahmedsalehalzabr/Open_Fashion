@@ -5,15 +5,15 @@ import 'package:open_fashion/components/custom_text.dart';
 import 'package:open_fashion/core/colors.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.isSvgg, required this.title, required this.inTap});
+  const CustomButton({super.key, required this.isSvgg, required this.title, required this.onTap});
 final bool isSvgg;
 final String title;
-final Function() inTap;
+final Function()? onTap;
   @override
   Widget build(BuildContext context) {
     bool isSvg = isSvgg;
     return GestureDetector(
-      onTap: (){},
+      onTap: onTap,
       child: Container(
         color: AppColors.primary,
         width: double.infinity,

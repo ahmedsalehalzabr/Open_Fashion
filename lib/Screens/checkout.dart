@@ -62,7 +62,7 @@ class _CheckoutState extends State<Checkout> {
             CustomButton(
               isSvgg: true,
               title: "Checkout",
-              inTap: () {
+              onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (c){
                   return PlaceOrder(image: widget.image, name: widget.name, description: widget.description, qty: selectedQty, total: widget.price * selectedQty, price: widget.price,);
                 }));

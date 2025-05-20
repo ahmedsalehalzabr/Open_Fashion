@@ -54,10 +54,7 @@ class _CartWidgetState extends State<CartWidget> {
                     number++;
                     widget.onChanged(number);
                   });
-
                 }, "assets/svgs/plus.svg"),
-
-
               ],
             ),
             Gap(20),
