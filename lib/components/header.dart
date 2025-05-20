@@ -16,8 +16,8 @@ final String title;
           child: CustomText(
             text: title.toUpperCase(),
             color: AppColors.primary,
-            spacing: 10,
-            size: 25,),
+            spacing: 4,
+            size: 20,),
         ),
         Gap(10),
         Image.asset("assets/svgs/line.png",width: 190,color: Colors.black,),
