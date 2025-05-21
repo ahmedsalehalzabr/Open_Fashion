@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:open_fashion/Screens/add_address.dart';
+import 'package:open_fashion/Screens/add_cart.dart';
 import 'package:open_fashion/components/custom_appbar.dart';
 import 'package:open_fashion/components/custom_button.dart';
 import 'package:open_fashion/components/custom_text.dart';
 import 'package:open_fashion/components/header.dart';
+import 'package:open_fashion/components/shipping_method.dart';
 import 'package:open_fashion/core/colors.dart';
 
 class PlaceOrder extends StatefulWidget {
@@ -102,17 +104,16 @@ class _PlaceOrderState extends State<PlaceOrder> {
             ),
             Gap(40),
             CustomText(text: "Shipping Method".toUpperCase(),color: Colors.black38,size: 16,),
-            Gap(20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: CustomContainer("Pickup at store", Icons.keyboard_arrow_down_sharp,true),
-            ),
-            Gap(40),
+
+            ShippingMethod(),
+
             CustomText(text: "Shipping Method".toUpperCase(),color: Colors.black38,size: 16,),
             Gap(20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: CustomContainer("Select Payment Method", Icons.keyboard_arrow_down_sharp,false),
+              child: GestureDetector(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => AddCart())),
+                  child: CustomContainer("Select Payment Method", Icons.keyboard_arrow_down_sharp,false)),
             ),
             Spacer(),
             Row(
