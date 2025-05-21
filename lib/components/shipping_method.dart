@@ -12,7 +12,7 @@ class ShippingMethod extends StatelessWidget {
         Gap(20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: CustomContainer("Pickup at store", Icons.keyboard_arrow_down_sharp,true),
+          child: customContainer("Pickup at store", Icons.keyboard_arrow_down_sharp,true),
         ),
         Gap(40),
       ],

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:open_fashion/Screens/add_address.dart';
 import 'package:open_fashion/Screens/add_cart.dart';
+import 'package:open_fashion/components/cart_widget.dart';
 import 'package:open_fashion/components/custom_appbar.dart';
 import 'package:open_fashion/components/custom_button.dart';
+import 'package:open_fashion/components/custom_dailog.dart';
 import 'package:open_fashion/components/custom_text.dart';
 import 'package:open_fashion/components/header.dart';
 import 'package:open_fashion/components/shipping_method.dart';
@@ -33,6 +36,16 @@ class PlaceOrder extends StatefulWidget {
 class _PlaceOrderState extends State<PlaceOrder> {
 
  dynamic _savedAddress;
+ dynamic _savedCard;
+ late int selectedQty;
+
+ @override
+ void initState() {
+   selectedQty = widget.qty;
+   super.initState();
+ }
+
+ /// address
   void _openAddress(context) async {
     final addressData = await Navigator.push(
         context,
@@ -53,6 +66,19 @@ class _PlaceOrderState extends State<PlaceOrder> {
       _savedAddress = newAddress;
     });
   }
+ /// card
+ void _openCard () async {
+   final cardData = await Navigator.push(
+     context,
+     MaterialPageRoute(builder: (c) => AddCard()),
+   );
+
+   if (cardData != null) {
+     setState(() {
+       _savedCard = cardData;
+     });
+   }
+ }
 
   @override
   Widget build(BuildContext context) {
@@ -61,104 +87,163 @@ class _PlaceOrderState extends State<PlaceOrder> {
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Header(title: "Chekout"),
-
-            CustomText(text: "Shipping address".toUpperCase(),color: Colors.black38,size: 16,),
-            Gap(13),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Header(title: "Chekout"),
+          
+              CustomText(text: "Shipping address".toUpperCase(),color: Colors.black38,size: 16,),
+              Gap(13),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  children: [
+                    _savedAddress != null ?  GestureDetector(
+                      onTap: _editAddress,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomText(text: "${_savedAddress['first'] + _savedAddress['last']}".toUpperCase(),color: Colors.black,size: 20,),
+                              Gap(15),
+                              CustomText(text: _savedAddress['address'].toUpperCase(),color: Colors.black38,size: 17,),
+                              Gap(10),
+                              CustomText(text: _savedAddress['city'].toUpperCase(),color: Colors.black38,size: 17,),
+                              Gap(10),
+                              CustomText(text: "(${_savedAddress['phone']})".toUpperCase(),color: Colors.black38,size: 17,),
+                            ],
+                          ),
+                          SvgPicture.asset("assets/svgs/arrow.svg"),
+                        ],
+                      ),
+                    ) : SizedBox.shrink(),
+                    Gap(20),
+                    _savedAddress == null ?   GestureDetector(
+                      onTap: (){
+                        _openAddress(context);
+                      },
+                        child: customContainer("Add Shipping Address", Icons.add,false)) : SizedBox.shrink(),
+                  ],
+                ),
+              ),
+              Gap(40),
+              CustomText(text: "Shipping Method".toUpperCase(),color: Colors.black38,size: 16,),
+          
+              /// Shipping Method
+              _savedCard != null && _savedAddress != null ? SizedBox.shrink() : ShippingMethod(),
+          
+              /// payment Method
+              _savedCard != null && _savedAddress != null ? SizedBox.shrink() : CustomText(
+                text: "Payment Method".toUpperCase(),
+                color: Colors.black38,
+                size: 16,
+              ),
+          
+              Gap(20),
+              _savedCard != null ? Column(
                 children: [
-                  _savedAddress != null ?  GestureDetector(
-                    onTap: _editAddress,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(text: "${_savedAddress['first'] + _savedAddress['last']}".toUpperCase(),color: Colors.black,size: 20,),
-                            Gap(15),
-                            CustomText(text: _savedAddress['address'].toUpperCase(),color: Colors.black38,size: 17,),
-                            Gap(10),
-                            CustomText(text: _savedAddress['city'].toUpperCase(),color: Colors.black38,size: 17,),
-                            Gap(10),
-                            CustomText(text: "(${_savedAddress['phone']})".toUpperCase(),color: Colors.black38,size: 17,),
-                          ],
-                        ),
-                        Icon(Icons.arrow_forward_ios_rounded,color: Colors.grey,),
-                      ],
-                    ),
-                  ) : SizedBox.shrink(),
+                  Divider(color: Colors.grey.shade300),
                   Gap(20),
-                  _savedAddress == null ?   GestureDetector(
-                    onTap: (){
-                      _openAddress(context);
-                    },
-                      child: CustomContainer("Add Shipping Address", Icons.add,false)) : SizedBox.shrink(),
+                  Row(
+                    children: [
+                      SvgPicture.asset("assets/svgs/Mastercard.svg",width: 40),
+                      Gap(10),
+                      CustomText(text: "Master Card ending",color: Colors.black),
+                      Gap(10),
+                      CustomText(
+                        text: "••••${_savedCard['number'].toString().substring(_savedCard['number'].length - 2)}",
+                        color: Colors.black,
+                      ),
+                      Spacer(),
+                      SvgPicture.asset("assets/svgs/arrow.svg"),
+                    ],
+                  ),
+                  Gap(20),
+                  Divider(color: Colors.grey.shade300),
+                ],
+              ) : GestureDetector(
+                onTap: _openCard,
+                child: customContainer(
+                  "Select Payment Method",
+                  Icons.keyboard_arrow_down_sharp,
+                  false,
+                ),
+              ),
+          
+              Gap(20),
+          
+              _savedCard != null && _savedAddress != null ? CartWidget(
+                image: widget.image,
+                name:  widget.name,
+                descp:  widget.description,
+                price:  widget.price,
+                qty: widget.qty,
+                onChanged: (qty) => setState(() => selectedQty = qty),
+              ) : SizedBox.shrink(),
+          
+              Gap(120),
+          
+              /// Ending
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomText(text: "Total", color: AppColors.primary),
+                  CustomText(
+                    text: "\$ ${widget.price * selectedQty}",
+                    color: Colors.red.shade200,
+                  ),
                 ],
               ),
-            ),
-            Gap(40),
-            CustomText(text: "Shipping Method".toUpperCase(),color: Colors.black38,size: 16,),
-
-            ShippingMethod(),
-
-            CustomText(text: "Shipping Method".toUpperCase(),color: Colors.black38,size: 16,),
-            Gap(20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: GestureDetector(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => AddCart())),
-                  child: CustomContainer("Select Payment Method", Icons.keyboard_arrow_down_sharp,false)),
-            ),
-            Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(text: "Est. Total",color: AppColors.primary,),
-                CustomText(text: "\$ ${widget.total}",color: AppColors.primary,),
-              ],
-            ),
-            Gap(20),
-            CustomButton(
-              isSvgg: true,
-              title: "Place Order",
-              onTap: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (c){
-                //   return PlaceOrder(image:image, name: name, description:description, qty: selectedQty, total: price * selectedQty, price: price,);
-                // }));
-              },
-            ),
-
-          ],
+              Gap(20),
+               CustomButton(isSvgg: true, title: "Place order", onTap: () {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return Dialog(
+                        child: CustomDailog(),
+                      );
+                    }
+                );
+          
+              }),
+              Gap(70),
+            ],
+          ),
         ),
       ),
+
     );
   }
 }
 
-Widget CustomContainer(text,icon,isFree) {
-  return    Container(
-    padding: EdgeInsets.symmetric(horizontal: 20,vertical: 14),
+
+
+
+
+
+Widget customContainer(text, icon, isFree) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 13),
     decoration: BoxDecoration(
       color: Colors.grey.shade100,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(100),
     ),
     width: double.infinity,
-    child:Row(
+    child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CustomText(text: text,color: Colors.black,),
+        CustomText(text: text, color: Colors.black),
         Spacer(),
-
-       isFree ? CustomText(text: "FREE",color: Colors.black,) : SizedBox.shrink(),
+        isFree
+            ? CustomText(text: "FREE", color: Colors.black)
+            : SizedBox.shrink(),
         Gap(15),
         Icon(icon),
       ],
-    ) ,
+    ),
   );
 }

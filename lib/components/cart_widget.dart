@@ -1,21 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-
 import '../core/colors.dart';
 import 'custom_text.dart';
 
 class CartWidget extends StatefulWidget {
-  const CartWidget({super.key, required this.image, required this.name, required this.price, required this.description, required this.onChanged});
-final String image,name,description;
-final int price;
-final Function(int) onChanged;
+  const CartWidget({
+    super.key,
+    required this.image,
+    required this.name,
+    required this.descp,
+    required this.price,
+    required this.onChanged,
+    required this.qty,
+
+  });
+  final String image, name, descp;
+  final int price;
+  final Function(int) onChanged;
+  final int qty;
+
   @override
   State<CartWidget> createState() => _CartWidgetState();
 }
 
 class _CartWidgetState extends State<CartWidget> {
-  int number = 1;
+  late int number;
+
+  @override
+  void initState() {
+    number = 1;
+    number = widget.qty;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,33 +40,54 @@ class _CartWidgetState extends State<CartWidget> {
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+
       children: [
-        Image.asset(widget.image,width: 120,),
+        Image.asset(widget.image, width: 120),
         Gap(20),
+
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gap(10),
-            CustomText(text: widget.name.toUpperCase(),spacing: 4,color: AppColors.primary,),
+            CustomText(
+              text: widget.name.toUpperCase(),
+              spacing: 4,
+              color: AppColors.primary,
+            ),
             Gap(10),
             SizedBox(
-                width: size.width * 0.5,
-                child: CustomText(text: widget.description.toUpperCase(),spacing: 2,color: AppColors.primary,)),
+              width: size.width * 0.5,
+              child: CustomText(
+                text: widget.descp.toUpperCase(),
+                spacing: 2,
+                color: AppColors.primary,
+                size: 11,
+              ),
+            ),
             Gap(30),
             Row(
               children: [
-                gty((){
+                qty(() {
                   setState(() {
-                    if(number > 1){
+                    if (number > 1) {
                       number--;
                       widget.onChanged(number);
                     }
                   });
                 }, "assets/svgs/min.svg"),
+
                 Gap(12),
-                CustomText(text: number.toString(),spacing: 4,color: AppColors.primary,weight: FontWeight.bold,),
+
+                CustomText(
+                  text: number.toString(),
+                  spacing: 4,
+                  color: AppColors.primary,
+                  weight: FontWeight.bold,
+                ),
+
                 Gap(12),
-                gty((){
+
+                qty(() {
                   setState(() {
                     number++;
                     widget.onChanged(number);
@@ -57,22 +95,27 @@ class _CartWidgetState extends State<CartWidget> {
                 }, "assets/svgs/plus.svg"),
               ],
             ),
-            Gap(20),
-            CustomText(text: "\$ ${widget.price}",color: Colors.red.shade200,size: 22,),
+            Gap(28),
+            CustomText(
+              text: "\$ ${widget.price}",
+              color: Colors.red.shade200,
+              size: 22,
+            ),
           ],
-        )
+        ),
       ],
     );
   }
 }
-Widget gty(onTap, svg) {
+
+Widget qty(onTap, svg) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
       padding: EdgeInsets.all(3),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.grey.shade400,width: 2),
+        border: Border.all(color: Colors.grey.shade400, width: 1),
       ),
       child: SvgPicture.asset(svg),
     ),
