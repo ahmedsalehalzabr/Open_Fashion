@@ -34,7 +34,7 @@ class CustomDailog extends StatelessWidget {
               size: 19,
             ),
             Gap(30),
-            SvgPicture.asset("assets/pop/done.svg",width: 70,),
+            SvgPicture.asset("assets/svgs/do.svg",width: 70,),
             Gap(20),
             CustomText(
               text: "Payment success".toUpperCase(),
@@ -59,11 +59,11 @@ class CustomDailog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset("assets/pop/emogi1.svg"),
+                SvgPicture.asset("assets/svgs/e3.svg",width: 30,),
                 Gap(20),
-                SvgPicture.asset("assets/pop/emogi2.svg"),
+                SvgPicture.asset("assets/svgs/e3.svg",width: 30,),
                 Gap(20),
-                SvgPicture.asset("assets/pop/emogi3.svg"),
+                SvgPicture.asset("assets/svgs/e3.svg",width: 30,),
               ],
             ),
             Spacer(),
